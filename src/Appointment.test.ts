@@ -7,3 +7,9 @@ test("should create an appointment", () => {
   const appointment = Appointment.create(date);
   ok(appointment);
 });
+
+test("should fail if date is in the past", () => {
+  const date = new Date();
+  date.setFullYear(date.getFullYear() - 1);
+  throws(() => Appointment.create(date));
+});
