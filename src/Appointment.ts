@@ -2,13 +2,21 @@ import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
 import { TitleIsShort } from "./Expections/TitleIsShort";
+import { Expert } from "./Expert";
+
+export type AppointmentProps = {
+  date: Date;
+  title: string;
+  experts: Array<Expert>;
+};
 
 export class Appointment {
   readonly MINIMUM_CHARACTERS = 3;
 
-  constructor(
+  private constructor(
     private readonly date: Date,
     private readonly title: string,
+    private readonly experts: Array<Expert>,
   ) {
     this.validate();
   }
@@ -33,9 +41,17 @@ export class Appointment {
     if (titleHasNumbers) {
       throw new TitleHasNumbers(this.title);
     }
+
+    if (this.experts.length === 0) {
+      throw new Error("An Appointment needs at least one expert");
+    }
   }
 
-  static create(date: Date, title: string): Appointment {
-    return new Appointment(date, title);
+  static create(
+    date: Date,
+    title: string,
+    experts: Array<Expert>,
+  ): Appointment {
+    return new Appointment(date, title, experts);
   }
 }
