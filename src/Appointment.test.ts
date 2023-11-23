@@ -6,6 +6,7 @@ import { TitleIsShort } from "./Expections/TitleIsShort";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
 import { Expert } from "./Expert";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
+import { TooFewExperts } from "./Expections/TooFewExperts";
 
 function createSut(props?: Partial<AppointmentProps>): Appointment {
   return Appointment.create(
@@ -42,5 +43,9 @@ describe("Appointment", () => {
   test("should fail if title contains numbers", () => {
     const title = "title23";
     throws(() => createSut({ title }), new TitleHasNumbers(title));
+  });
+
+  test("should fail if appointment dont have an expert", () => {
+    throws(() => createSut({ experts: [] }), new TooFewExperts());
   });
 });

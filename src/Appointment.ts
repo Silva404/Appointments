@@ -2,6 +2,7 @@ import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
 import { TitleIsShort } from "./Expections/TitleIsShort";
+import { TooFewExperts } from "./Expections/TooFewExperts";
 import { Expert } from "./Expert";
 
 export type AppointmentProps = {
@@ -43,7 +44,7 @@ export class Appointment {
     }
 
     if (this.experts.length === 0) {
-      throw new Error("An Appointment needs at least one expert");
+      throw new TooFewExperts();
     }
   }
 
