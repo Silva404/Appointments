@@ -1,4 +1,11 @@
+import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
+import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
+import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
+import { TitleIsShort } from "./Expections/TitleIsShort";
+
 export class Appointment {
+  readonly MINIMUM_CHARACTERS = 3;
+
   constructor(
     private readonly date: Date,
     private readonly title: string,
@@ -9,14 +16,22 @@ export class Appointment {
   private validate() {
     const dateNow = new Date();
     const scheduledInOneYearFromNow = dateNow.getFullYear() + 1;
+    const titleHasNumbers = /\d/.test(this.title.trim());
+
     if (scheduledInOneYearFromNow === this.date.getFullYear()) {
-      throw new Error(
-        `Cant schedule an appointment for more than a year in advane: ${this.date.toDateString()}`,
-      );
+      throw new AppointmentInFuture(this.date.toDateString());
     }
 
     if (this.title.length === 0) {
-      throw new Error(`Title cannot be empty: ${this.title}`);
+      throw new TitleIsEmpty(this.title);
+    }
+
+    if (this.title.length < this.MINIMUM_CHARACTERS) {
+      throw new TitleIsShort(this.title);
+    }
+
+    if (titleHasNumbers) {
+      throw new TitleHasNumbers(this.title);
     }
   }
 
