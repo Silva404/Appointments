@@ -16,7 +16,7 @@ function createSut(props?: Partial<AppointmentProps>): Appointment {
   );
 }
 
-describe("Appointment", () => {
+describe("Appointment", { concurrency: true }, () => {
   test("should create an appointment", () => {
     ok(createSut());
   });
@@ -47,5 +47,23 @@ describe("Appointment", () => {
 
   test("should fail if appointment dont have an expert", () => {
     throws(() => createSut({ experts: [] }), new TooFewExperts());
+  });
+
+  test("should check if appointment is upcoming", () => {
+    const date = new Date();
+    date.setSeconds(date.getSeconds() * 2);
+    const apppointment = createSut({ date });
+
+    ok(apppointment.isUpcoming());
+    ok(!apppointment.isPrevious());
+  });
+
+  test("should check if appointment is previous", () => {
+    const date = new Date();
+    date.setMonth(date.getMonth() - 1);
+    const apppointment = createSut({ date });
+
+    ok(apppointment.isPrevious());
+    ok(!apppointment.isUpcoming());
   });
 });

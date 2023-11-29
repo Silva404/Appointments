@@ -12,6 +12,7 @@ export type AppointmentProps = {
 };
 
 export class Appointment {
+  readonly dateNow = new Date();
   readonly MINIMUM_CHARACTERS = 3;
 
   private constructor(
@@ -23,8 +24,7 @@ export class Appointment {
   }
 
   private validate() {
-    const dateNow = new Date();
-    const scheduledInOneYearFromNow = dateNow.getFullYear() + 1;
+    const scheduledInOneYearFromNow = this.dateNow.getFullYear() + 1;
     const titleHasNumbers = /\d/.test(this.title.trim());
 
     if (scheduledInOneYearFromNow === this.date.getFullYear()) {
@@ -46,6 +46,14 @@ export class Appointment {
     if (this.experts.length === 0) {
       throw new TooFewExperts();
     }
+  }
+
+  isUpcoming(): boolean {
+    return this.date.getTime() > this.dateNow.getTime();
+  }
+
+  isPrevious(): boolean {
+    return !this.isUpcoming();
   }
 
   static create(
