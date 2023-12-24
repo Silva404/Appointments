@@ -12,11 +12,11 @@ export class Consultant {
   }
 
   averageRating(): number {
-    return (
-      this.ratings.reduce((acc, item) => {
-        return acc + item.rating;
-      }, 0) / this.ratings.length
-    );
+    const ratingsSum = this.ratings.reduce((acc, item) => {
+      return acc + item.rating;
+    }, 0);
+
+    return ratingsSum / this.ratings.length;
   }
 
   static create(
