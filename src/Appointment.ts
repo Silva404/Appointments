@@ -31,13 +31,15 @@ export class Appointment {
   }
 
   deleteNote(note: Note): void {
-    const foundNote = this.notes.findIndex((item) => item.id === note.id);
+    const foundNote = this.notes.find((item) => item.id === note.id);
 
     if (!foundNote) {
       throw new NoteNotFound();
     }
 
-    this.notes.splice(foundNote, 1);
+    const index = this.notes.findIndex((item) => item.id === note.id);
+
+    this.notes.splice(index, 1);
   }
 
   getNotes(): Array<Note> {

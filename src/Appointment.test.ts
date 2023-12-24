@@ -1,6 +1,6 @@
 import { Appointment, AppointmentProps } from "./Appointment";
 import { test, describe } from "node:test";
-import { ok, throws, equal, strictEqual, deepEqual } from "node:assert";
+import { ok, throws, equal, deepEqual } from "node:assert";
 import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
 import { TitleIsShort } from "./Expections/TitleIsShort";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
