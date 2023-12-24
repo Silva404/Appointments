@@ -1,9 +1,9 @@
-import { Name } from "./Name";
+import { FullName } from "./FullName";
 import { Rate } from "./Rate";
 
 export class Consultant {
   private constructor(
-    readonly name: Name,
+    readonly name: FullName,
     private ratings: Array<Rate> = [],
   ) {}
 
@@ -24,6 +24,6 @@ export class Consultant {
     lastName: string,
     ratings?: Array<Rate>,
   ): Consultant {
-    return new Consultant(new Name(firstName, lastName), ratings);
+    return new Consultant(FullName.create(firstName, lastName), ratings);
   }
 }

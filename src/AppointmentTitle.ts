@@ -8,7 +8,7 @@ export class AppointmentTitle {
   constructor(public readonly title: string) {
     const titleHasNumbers = /\d/.test(this.title.trim());
 
-    if (this.title.length === 0) {
+    if (this.title.trim().length === 0) {
       throw new TitleIsEmpty(this.title);
     }
 

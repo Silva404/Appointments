@@ -1,5 +1,5 @@
-import { Name } from "./Name";
+import { FullName } from "./FullName";
 
 export class User {
-  constructor(readonly name: Name) {}
+  constructor(readonly name: FullName) {}
 }

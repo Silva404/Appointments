@@ -18,15 +18,9 @@ export class Appointment {
   private constructor(
     public readonly date: AppointmentDate,
     readonly title: AppointmentTitle,
-    readonly consultants: Array<Consultant>,
-    readonly user: User,
     public notes: Array<Note> = [],
     public topicsOfInterest: Array<TopicOfInterest> = [],
-  ) {
-    if (this.consultants.length === 0) {
-      throw new TooFewExperts();
-    }
-  }
+  ) {}
 
   addNote(note: Note): void {
     this.notes.push(note);
@@ -53,11 +47,13 @@ export class Appointment {
   }
 
   static create(props: AppointmentProps): Appointment {
+    if (props.consultants.length === 0) {
+      throw new TooFewExperts();
+    }
+
     return new Appointment(
       new AppointmentDate(props.date),
       new AppointmentTitle(props.title),
-      props.consultants,
-      props.user,
     );
   }
 }

@@ -8,7 +8,7 @@ import { Consultant } from "./Consultant";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TooFewExperts } from "./Expections/TooFewExperts";
 import { User } from "./User";
-import { Name } from "./Name";
+import { FullName } from "./FullName";
 import { Note } from "./Note";
 import { EmptyNote } from "./Expections/EmptyNote";
 import { NoteNotFound } from "./Expections/NoteNotFound";
@@ -21,7 +21,7 @@ function createSut(props?: Partial<AppointmentProps>): Appointment {
     consultants: props?.consultants ?? [
       Consultant.create("consultant firstName", "consultant lastName"),
     ],
-    user: new User(new Name("user first name", "user last name")),
+    user: new User(FullName.create("user first name", "user last name")),
   });
 }
 
