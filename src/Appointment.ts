@@ -4,6 +4,7 @@ import { TooFewExperts } from "./Expections/TooFewExperts";
 import { Consultant } from "./Consultant";
 import { User } from "./User";
 import { Note } from "./Note";
+import { NoteNotFound } from "./Expections/NoteNotFound";
 
 export type AppointmentProps = {
   date: Date;
@@ -27,6 +28,16 @@ export class Appointment {
 
   addNote(note: Note): void {
     this.notes.push(note);
+  }
+
+  deleteNote(note: Note): void {
+    const foundNote = this.notes.findIndex((item) => item.id === note.id);
+
+    if (!foundNote) {
+      throw new NoteNotFound();
+    }
+
+    this.notes.splice(foundNote, 1);
   }
 
   getNotes(): Array<Note> {
