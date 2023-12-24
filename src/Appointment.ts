@@ -5,6 +5,7 @@ import { Consultant } from "./Consultant";
 import { User } from "./User";
 import { Note } from "./Note";
 import { NoteNotFound } from "./Expections/NoteNotFound";
+import { TopicOfInterest } from "./TopicOfInterest";
 
 export type AppointmentProps = {
   date: Date;
@@ -20,6 +21,7 @@ export class Appointment {
     readonly consultants: Array<Consultant>,
     readonly user: User,
     public notes: Array<Note> = [],
+    public topicsOfInterest: Array<TopicOfInterest> = [],
   ) {
     if (this.consultants.length === 0) {
       throw new TooFewExperts();
@@ -40,6 +42,10 @@ export class Appointment {
     const index = this.notes.findIndex((item) => item.id === note.id);
 
     this.notes.splice(index, 1);
+  }
+
+  chooseTopicsOfInterest(topics: Array<TopicOfInterest>): void {
+    this.topicsOfInterest = topics;
   }
 
   getNotes(): Array<Note> {

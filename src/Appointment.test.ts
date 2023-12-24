@@ -12,6 +12,7 @@ import { Name } from "./Name";
 import { Note } from "./Note";
 import { EmptyNote } from "./Expections/EmptyNote";
 import { NoteNotFound } from "./Expections/NoteNotFound";
+import { TopicOfInterest } from "./TopicOfInterest";
 
 function createSut(props?: Partial<AppointmentProps>): Appointment {
   return Appointment.create({
@@ -115,5 +116,30 @@ describe("Appointment", { concurrency: true }, () => {
     appointment.deleteNote(note2);
 
     deepEqual(appointment.notes, [note1, note3]);
+  });
+
+  test("should be able to choose new Topics of interest", () => {
+    let topics = [
+      new TopicOfInterest("Health insurance"),
+      new TopicOfInterest("Pension insurance"),
+      new TopicOfInterest("Car insurance"),
+    ];
+
+    const appointment = createSut();
+    appointment.chooseTopicsOfInterest(topics);
+
+    deepEqual(appointment.topicsOfInterest, topics);
+    equal(appointment.topicsOfInterest.length, 3);
+
+    topics = [
+      new TopicOfInterest("Health insurance"),
+      new TopicOfInterest("Car insurance"),
+    ];
+    appointment.chooseTopicsOfInterest(topics);
+    deepEqual(appointment.topicsOfInterest, topics);
+    equal(appointment.topicsOfInterest.length, 2);
+
+    appointment.chooseTopicsOfInterest([]);
+    equal(appointment.topicsOfInterest.length, 0);
   });
 });
