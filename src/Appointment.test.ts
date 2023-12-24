@@ -1,6 +1,6 @@
 import { Appointment, AppointmentProps } from "./Appointment";
 import { test, describe } from "node:test";
-import { ok, throws } from "node:assert";
+import { ok, throws, equal } from "node:assert";
 import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
 import { TitleIsShort } from "./Expections/TitleIsShort";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
@@ -9,6 +9,8 @@ import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TooFewExperts } from "./Expections/TooFewExperts";
 import { User } from "./User";
 import { Name } from "./Name";
+import { Note } from "./Note";
+import { EmptyNote } from "./Expections/EmptyNote";
 
 function createSut(props?: Partial<AppointmentProps>): Appointment {
   return Appointment.create({
@@ -70,5 +72,22 @@ describe("Appointment", { concurrency: true }, () => {
 
     ok(apppointment.date.isPrevious());
     ok(!apppointment.date.isUpcoming());
+  });
+
+  test("should add a note", () => {
+    const appointment = createSut();
+    const note = new Note("This is a note");
+
+    equal(appointment.notes.length, 0);
+    appointment.addNote(note);
+    equal(appointment.notes.length, 1);
+    ok(appointment.notes.includes(note));
+  });
+
+  test("should not allow empty note", () => {
+    const appointment = createSut();
+
+    throws(() => appointment.addNote(new Note("")), new EmptyNote());
+    equal(appointment.notes.length, 0);
   });
 });
