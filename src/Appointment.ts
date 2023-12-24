@@ -14,23 +14,21 @@ export type AppointmentProps = {
 export class Appointment {
   private constructor(
     public readonly date: AppointmentDate,
-    private readonly title: AppointmentTitle,
-    private readonly consultants: Array<Consultant>,
+    readonly title: AppointmentTitle,
+    readonly consultants: Array<Consultant>,
+    readonly user: User,
   ) {
     if (this.consultants.length === 0) {
       throw new TooFewExperts();
     }
   }
 
-  static create(
-    date: string,
-    title: string,
-    consultants: Array<Consultant>,
-  ): Appointment {
+  static create(props: AppointmentProps): Appointment {
     return new Appointment(
-      new AppointmentDate(date),
-      new AppointmentTitle(title),
-      consultants,
+      new AppointmentDate(props.date),
+      new AppointmentTitle(props.title),
+      props.consultants,
+      props.user,
     );
   }
 }

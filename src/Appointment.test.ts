@@ -7,13 +7,18 @@ import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
 import { Consultant } from "./Consultant";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TooFewExperts } from "./Expections/TooFewExperts";
+import { User } from "./User";
+import { Name } from "./Name";
 
 function createSut(props?: Partial<AppointmentProps>): Appointment {
-  return Appointment.create(
-    props?.date?.toString() ?? new Date().toString(),
-    props?.title ?? "title",
-    props?.consultants ?? [Consultant.create("firstName", "lastName")],
-  );
+  return Appointment.create({
+    date: props?.date ?? new Date(),
+    title: props?.title ?? "title",
+    consultants: props?.consultants ?? [
+      Consultant.create("consultant firstName", "consultant lastName"),
+    ],
+    user: new User(new Name("user first name", "user last name")),
+  });
 }
 
 describe("Appointment", { concurrency: true }, () => {
