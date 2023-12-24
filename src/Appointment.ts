@@ -1,66 +1,36 @@
-import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
-import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
-import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
-import { TitleIsShort } from "./Expections/TitleIsShort";
+import { AppointmentDate } from "./AppointmentDate";
+import { AppointmentTitle } from "./AppointmentTitle";
 import { TooFewExperts } from "./Expections/TooFewExperts";
-import { Expert } from "./Expert";
+import { Consultant } from "./Consultant";
+import { User } from "./User";
 
 export type AppointmentProps = {
   date: Date;
   title: string;
-  experts: Array<Expert>;
+  consultants: Array<Consultant>;
+  user: User;
 };
 
 export class Appointment {
-  readonly dateNow = new Date();
-  readonly MINIMUM_CHARACTERS = 3;
-
   private constructor(
-    private readonly date: Date,
-    private readonly title: string,
-    private readonly experts: Array<Expert>,
+    public readonly date: AppointmentDate,
+    private readonly title: AppointmentTitle,
+    private readonly consultants: Array<Consultant>,
   ) {
-    this.validate();
-  }
-
-  private validate() {
-    const scheduledInOneYearFromNow = this.dateNow.getFullYear() + 1;
-    const titleHasNumbers = /\d/.test(this.title.trim());
-
-    if (scheduledInOneYearFromNow === this.date.getFullYear()) {
-      throw new AppointmentInFuture(this.date.toDateString());
-    }
-
-    if (this.title.length === 0) {
-      throw new TitleIsEmpty(this.title);
-    }
-
-    if (this.title.length < this.MINIMUM_CHARACTERS) {
-      throw new TitleIsShort(this.title);
-    }
-
-    if (titleHasNumbers) {
-      throw new TitleHasNumbers(this.title);
-    }
-
-    if (this.experts.length === 0) {
+    if (this.consultants.length === 0) {
       throw new TooFewExperts();
     }
   }
 
-  isUpcoming(): boolean {
-    return this.date.getTime() > this.dateNow.getTime();
-  }
-
-  isPrevious(): boolean {
-    return !this.isUpcoming();
-  }
-
   static create(
-    date: Date,
+    date: string,
     title: string,
-    experts: Array<Expert>,
+    consultants: Array<Consultant>,
   ): Appointment {
-    return new Appointment(date, title, experts);
+    return new Appointment(
+      new AppointmentDate(date),
+      new AppointmentTitle(title),
+      consultants,
+    );
   }
 }

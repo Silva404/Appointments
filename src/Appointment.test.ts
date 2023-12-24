@@ -4,15 +4,15 @@ import { ok, throws } from "node:assert";
 import { AppointmentInFuture } from "./Expections/AppointmentInFuture";
 import { TitleIsShort } from "./Expections/TitleIsShort";
 import { TitleIsEmpty } from "./Expections/TitleIsEmpty";
-import { Expert } from "./Expert";
+import { Consultant } from "./Consultant";
 import { TitleHasNumbers } from "./Expections/TitleHasNumbers";
 import { TooFewExperts } from "./Expections/TooFewExperts";
 
 function createSut(props?: Partial<AppointmentProps>): Appointment {
   return Appointment.create(
-    props?.date ?? new Date(),
+    props?.date?.toString() ?? new Date().toString(),
     props?.title ?? "title",
-    props?.experts ?? [Expert.create("firstName", "lastName")],
+    props?.consultants ?? [Consultant.create("firstName", "lastName")],
   );
 }
 
@@ -46,7 +46,7 @@ describe("Appointment", { concurrency: true }, () => {
   });
 
   test("should fail if appointment dont have an expert", () => {
-    throws(() => createSut({ experts: [] }), new TooFewExperts());
+    throws(() => createSut({ consultants: [] }), new TooFewExperts());
   });
 
   test("should check if appointment is upcoming", () => {
@@ -54,8 +54,8 @@ describe("Appointment", { concurrency: true }, () => {
     date.setSeconds(date.getSeconds() * 2);
     const apppointment = createSut({ date });
 
-    ok(apppointment.isUpcoming());
-    ok(!apppointment.isPrevious());
+    ok(apppointment.date.isUpcoming());
+    ok(!apppointment.date.isPrevious());
   });
 
   test("should check if appointment is previous", () => {
@@ -63,7 +63,7 @@ describe("Appointment", { concurrency: true }, () => {
     date.setMonth(date.getMonth() - 1);
     const apppointment = createSut({ date });
 
-    ok(apppointment.isPrevious());
-    ok(!apppointment.isUpcoming());
+    ok(apppointment.date.isPrevious());
+    ok(!apppointment.date.isUpcoming());
   });
 });
